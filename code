@@ -1,405 +1,257 @@
-#include <conio.h>
-
-#include <cstdio>
-
-#include <iostream>
-
-#include <string.h>
-
-#include <cstdlib>
-
+#include<bits/stdc++.h>
 using namespace std;
-
-static int t = 0;
-
-class a
-
+int COMPUTER = 1;
+int HUMAN = 2;
+#define SIDE 3
+#define COMPUTERMOVE 'O'
+#define HUMANMOVE 'X'
+void showBoard(char board[][SIDE])
 {
-
-  char bus_number[5], bus_driver[10], bus_arrival[5], bus_depart[5], b_from[10], b_to[10], bus_seat[8][4][10];
-
-public:
-
-  void add_new_number_of_bus();
-
-  void reservation();
-
-  void empty();
-
-  void view();
-
-  void avail();
-
-  void position(int i);
-
+printf("\t\t\t %c | %c | %c \n", board[0][0], board[0][1], board[0][2]);
+printf("\t\t\t-----------\n");
+printf("\t\t\t %c | %c | %c \n", board[1][0], board[1][1], board[1][2]);
+printf("\t\t\t-----------\n");
+printf("\t\t\t %c | %c | %c \n\n", board[2][0], board[2][1], board[2][2]);
 }
-
-bus[5];
-
-void bus_line(char ch)
-
+void showInstructions()
 {
-
-  for (int x=80;x>0;x--)
-
-  cout<<ch;
-
+printf("\nChoose a cell numbered from 1 to 9 as below and play\n\n");
+printf("\t\t\t 1 | 2 | 3 \n");
+printf("\t\t\t-----------\n");
+printf("\t\t\t 4 | 5 | 6 \n");
+printf("\t\t\t-----------\n");
+printf("\t\t\t 7 | 8 | 9 \n\n");
 }
-
-void a::add_new_number_of_bus()
-
+void initialise(char board[][SIDE])
 {
-
-  cout<<"Enter Bus Number: ";
-
-  cin>>bus[t].bus_number;
-
-  cout<<"\nEnter Driver's Name: ";
-
-  cin>>bus[t].bus_driver;
-
-  cout<<"\nArrival Time: ";
-
-  cin>>bus[t].bus_arrival;
-
-  cout<<"\nDeparture: ";
-
-  cin>>bus[t].bus_depart;
-
-  cout<<"\nFrom: \t\t\t";
-
-  cin>>bus[t].b_from;
-
-  cout<<"\nTo: \t\t\t";
-
-  cin>>bus[t].b_to;
-
-  bus[t].empty();
-  cout<<"\New Bus Added Successfully \t\t\t";
-  t++;
-
+// Initially the board to '*' as said
+for (int i=0; i<SIDE; i++)
+{
+for (int j=0; j<SIDE; j++)
+board[i][j] = '*';
 }
-
-void a::reservation()
-
-{
-
-  int bus_seat;
-
-  char no[5];
-
-  top:
-
-  cout<<"Bus Number: ";
-
-  cin>>no;
-
-  int y;
-
-  for(y=0;y<=t;y++)
-
-  {
-
-    if(strcmp(bus[y].bus_number, no)==0)
-
-    break;
-
-  }
-
-  while(y<=t)
-
-  {
-
-    cout<<"\nSeat Number: ";
-
-    cin>>bus_seat;
-
-    if(bus_seat>32)
-
-    {
-
-      cout<<"\nThere are only 32 Seats Available in this Bus.";
-
-    }
-
-    else
-
-    {
-
-    if (strcmp(bus[y].bus_seat[bus_seat/4][(bus_seat%4)-1], "Empty")==0)
-
-      {
-
-        cout<<"Enter Passenger's Name: ";
-
-        cin>>bus[y].bus_seat[bus_seat/4][(bus_seat%4)-1];
-
-        break;
-
-      }
-
-    else
-
-      cout<<"The Seat Number. is Already Reserved.\n";
-
-      }
-
-      }
-
-    if(y>t)
-
-    {
-
-      cout<<"Enter Correct Bus Number.\n";
-
-      goto top;
-
-    }
-
-  }
-
-
-void a::empty()
-
-{
-
-  for(int x=0; x<8;x++)
-
-  {
-
-    for(int z=0;z<4;z++)
-
-    {
-
-      strcpy(bus[t].bus_seat[x][z], "Empty");
-
-    }
-
-  }
-
 }
-
-void a::view()
-
+void declareWinner(int whoseTurn)
 {
-
-  int m;
-
-  char number[5];
-
-  cout<<"Enter Bus Number: ";
-
-  cin>>number;
-
-  for(m=0;m<=t;m++)
-
-  {
-
-    if(strcmp(bus[m].bus_number, number)==0)
-
-    break;
-
-  }
-
-while(m<=t)
-
-{
-
-  bus_line('*');
-
-  cout<<"Bus Number: \t"<<bus[m].bus_number
-
-  <<"\nDriver: \t"<<bus[m].bus_driver<<"\t\tArrival Time: \t"
-
-  <<bus[m].bus_arrival<<"\tDeparture Time:"<<bus[m].bus_depart
-
-  <<"\nFrom: \t\t"<<bus[m].b_from<<"\t\tTo: \t\t"<<
-
-  bus[m].b_to<<"\n";
-
-  bus_line('*');
-
-  bus[0].position(m);
-
-  int d=1;
-
-  for (int x=0; x<8; x++)
-
-  {
-
-    for(int y=0;y<4;y++)
-
-    {
-
-      d++;
-
-      if(strcmp(bus[m].bus_seat[x][y],"Empty")!=0)
-
-      cout<<"\nThe Seat no "<<(d-1)<<" is Reserved for "<<bus[m].bus_seat[x][y]<<".";
-
-    }
-
-  }
-
-  break;
-
-  }
-
-  if(m>t)
-
-    cout<<"Enter Correct Bus Number: ";
-
+if (whoseTurn == COMPUTER)
+printf("COMPUTER has won\n");
+else
+printf("HUMAN has won\n");
 }
-
-void a::position(int l)
-
+bool rowCrossed(char board[][SIDE])
 {
-
-  int r=0;t=0;
-
-  for (int x =0; x<8;x++)
-
-  {
-
-    cout<<"\n";
-
-    for (int z = 0;z<4; z++)
-
-    {
-
-      r++;
-
-      if(strcmp(bus[l].bus_seat[x][z], "Empty")==0)
-
-        {
-
-          cout.width(5);
-
-          cout.fill(' ');
-
-          cout<<r<<".";
-
-          cout.width(10);
-
-          cout.fill(' ');
-
-          cout<<bus[l].bus_seat[x][z];
-
-          t++;
-
-        }
-
-        else
-
-        {
-
-        cout.width(5);
-
-        cout.fill(' ');
-
-        cout<<r<<".";
-
-        cout.width(10);
-
-        cout.fill(' ');
-
-        cout<<bus[l].bus_seat[x][z];
-
-        }
-
-      }
-
-    }
-
-  cout<<"\n\nThere are "<<t<<" Seats Empty in Bus Number: "<<bus[l].bus_number;
-
-  }
-
-void a::avail()
-
+for (int i=0; i<SIDE; i++)
 {
-
-
-  for(int y=0;y<t;y++)
-
-  {
-
-    bus_line('*');
-
-    cout<<"Bus Number: \t"<<bus[y].bus_number<<"\nDriver: \t"<<bus[y].bus_driver
-
-    <<"\t\tArrival Time: \t"<<bus[y].bus_arrival<<"\tDeparture Time: \t"
-
-    <<bus[y].bus_depart<<"\nFrom: \t\t"<<bus[y].b_from<<"\t\tTo: \t\t\t"
-
-    <<bus[y].b_to<<"\n";
-
-    bus_line('*');
-
-    bus_line('_');
-
-  }
-
+if (board[i][0] == board[i][1] &&
+board[i][1] == board[i][2] &&
+board[i][0] != '*')
+return (true);
 }
-
-int main()
-
-{
-
-system("cls");
-
-int w;
-
-while(1)
-
-{
-
-    //system("cls");
-    cout<<"\n\n";
-    cout<<"\t\t**SIMPLE BUS RESERVATION SYSTEM**";
-
-  cout<<"\n\n";
-
-  cout<<"\t\t\t1.Add New Bus Number\n\t\t\t"
-
-  <<"2.Reservation\n\t\t\t"
-
-  <<"3.Show Reservation\n\t\t\t"
-
-  <<"4.Buses Available \n\t\t\t"
-
-  <<"5.Exit";
-
-  cout<<"\n\t\t\tEnter your Choice:- ";
-
-  cin>>w;
-
-  switch(w)
-
-  {
-
-    case 1:  bus[t].add_new_number_of_bus();
-
-      break;
-
-    case 2:  bus[t].reservation();
-
-      break;
-
-    case 3:  bus[0].view();
-
-      break;
-
-    case 4:  bus[0].avail();
-
-      break;
-
-    case 5:  exit(0);
-
-  }
-
+return(false);
 }
-
+bool columnCrossed(char board[][SIDE])
+{
+for (int i=0; i<SIDE; i++)
+{
+if (board[0][i] == board[1][i] &&
+board[1][i] == board[2][i] &&
+board[0][i] != '*')
+return (true);
+}
+return(false);
+}
+bool diagonalCrossed(char board[][SIDE])
+{
+if (board[0][0] == board[1][1] &&
+board[1][1] == board[2][2] &&
+board[0][0] != '*')
+return(true);
+if (board[0][2] == board[1][1] &&
+board[1][1] == board[2][0] &&
+board[0][2] != '*')
+return(true);
+return(false);
+}
+bool gameOver(char board[][SIDE])
+{
+return(rowCrossed(board) || columnCrossed(board) || diagonalCrossed(board) );
+}
+int minimax(char board[][SIDE], int depth, bool isAI)
+{
+int score = 0;
+int bestScore = 0;
+if (gameOver(board) == true)
+{
+if (isAI == true)
+return -10;
+if (isAI == false)
+return +10;
+}
+else
+{
+if(depth < 9)
+{
+if(isAI == true)
+{
+bestScore = -999;
+for(int i=0; i<SIDE; i++)
+{
+for(int j=0; j<SIDE; j++)
+{
+if (board[i][j] == '*')
+{
+board[i][j] = COMPUTERMOVE;
+score = minimax(board, depth + 1, false);
+board[i][j] = '*';
+if(score > bestScore)
+{
+bestScore = score;
+}
+}
+}
+}
+return bestScore;
+}
+else
+{
+bestScore = 999;
+for (int i = 0; i < SIDE; i++)
+{
+for (int j = 0; j < SIDE; j++)
+{
+if (board[i][j] == '*')
+{
+board[i][j] = HUMANMOVE;
+score = minimax(board, depth + 1, true);
+board[i][j] = '*';
+if (score < bestScore)
+{
+bestScore = score;
+}
+}
+}
+}
+return bestScore;
+}
+}
+else
+{
 return 0;
-
+}
+}
+}
+int bestMove(char board[][SIDE], int moveIndex)
+{
+int x = -1, y = -1;
+int score = 0, bestScore = -999;
+for (int i = 0; i < SIDE; i++)
+{
+for (int j = 0; j < SIDE; j++)
+{
+if (board[i][j] == '*')
+{
+board[i][j] = COMPUTERMOVE;
+score = minimax(board, moveIndex+1, false);
+board[i][j] = '*';
+if(score > bestScore)
+{
+bestScore = score;
+x = i;
+y = j;
+}
+}
+}
+}
+return x*3+y;
+}
+// A function to play Tic-Tac-Toe
+void playTicTacToe(int whoseTurn)
+{
+char board[SIDE][SIDE];
+int moveIndex = 0, x = 0, y = 0;
+initialise(board);
+showInstructions();
+while (gameOver(board) == false && moveIndex != SIDE*SIDE)
+{
+int n;
+if (whoseTurn == COMPUTER)
+{
+n = bestMove(board, moveIndex);
+x = n / SIDE;
+y = n % SIDE;
+board[x][y] = COMPUTERMOVE;
+printf("COMPUTER has put a %c in cell %d\n\n", COMPUTERMOVE,
+n+1);
+showBoard(board);
+moveIndex ++;
+whoseTurn = HUMAN;
+}
+else if (whoseTurn == HUMAN)
+{
+printf("You can insert in the following positions : ");
+for(int i=0; i<SIDE; i++)
+for (int j = 0; j < SIDE; j++)
+if (board[i][j] == '*')
+printf("%d ", (i * 3 + j) + 1);
+printf("\n\nEnter the position = ");
+scanf("%d",&n);
+n--;
+x = n / SIDE;
+y = n % SIDE;
+if(board[x][y] == '*' && n<9 && n>=0)
+{
+board[x][y] = HUMANMOVE;
+printf ("\nHUMAN has put a %c in cell %d\n\n", HUMANMOVE,
+n+1);
+showBoard(board);
+moveIndex ++;
+whoseTurn = COMPUTER;
+}
+else if(board[x][y] != '*' && n<9 && n>=0)
+{
+printf("\nPosition is occupied, select any one place from the available places\n\n");
+}
+else if(n<0 || n>8)
+{
+printf("Invalid position\n");
+}
+}
+}
+if (gameOver(board) == false && moveIndex == SIDE * SIDE)
+printf("It's a draw\n");
+else
+{
+if (whoseTurn == COMPUTER)
+whoseTurn = HUMAN;
+else if (whoseTurn == HUMAN)
+whoseTurn = COMPUTER;
+declareWinner(whoseTurn);
+}
+}
+int main()
+{
+	// #ifndef ONLINE_JUDGE
+ //    //for getting input form input1.txt
+ //    freopen("input1.txt","r",stdin);
+ //    //for writing output to  output1.txt
+ //    freopen("output1.txt","w",stdout);
+ //    #endif
+printf("\n-------------------------------------------------------------------\n\n");
+printf("\t\t\t Tic-Tac-Toe\n");
+printf("\n-------------------------------------------------------------------\n\n");
+char cont='y';
+do {
+char choice;
+printf("Do you want to start first?(y/n) : ");
+scanf(" %c", &choice);
+if(choice=='n')
+playTicTacToe(COMPUTER);
+else if(choice=='y')
+playTicTacToe(HUMAN);
+else
+printf("Invalid choice\n");
+printf("\nDo you want to quit(y/n) : ");
+scanf(" %c", &cont);
+} while(cont=='n');
+return (0);
 }
